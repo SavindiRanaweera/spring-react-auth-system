@@ -4,6 +4,7 @@ import com.master.authfy.service.AppUserDetailsService;
 import com.master.authfy.util.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +39,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if ( authorizationHeader != null && authorizationHeader.startsWith( "Bearer " ) ) {
             jwt = authorizationHeader.substring( 7 );
 
+        }
+
+        if ( jwt == null ) {
+            Cookie[] cookies = request.getCookies();
+            if ( cookies != null ) {
+                for ( Cookie cookie : cookies ) {
+                    if ( cookie.getName().equals( "jwt" ) ) {
+                        jwt = cookie.getValue();
+                        break;
+                    }
+                }
+            }
         }
 
         filterChain.doFilter( request,response );
