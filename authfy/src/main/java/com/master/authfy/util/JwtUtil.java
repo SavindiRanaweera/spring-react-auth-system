@@ -46,4 +46,7 @@ public class JwtUtil {
         return claimsResolver.apply ( claims );
     }
 
+    public String extractEmail(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
 }
