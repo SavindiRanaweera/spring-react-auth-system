@@ -49,4 +49,12 @@ public class JwtUtil {
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }
+
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
+    }
+
+    private Boolean isTokenExpired(String token) {
+        return extractExpiration ( token ).before ( new Date ( ) );
+    }
 }
